@@ -33,6 +33,8 @@ export interface SearchOptions {
    * Set this if you made a search with the same query.
    */
   vqd?: string;
+  dl?: string;
+  ct? : string;
 }
 
 const defaultOptions: SearchOptions = {
@@ -41,7 +43,9 @@ const defaultOptions: SearchOptions = {
   locale: 'en-us',
   region: 'wt-wt',
   offset: 0,
-  marketRegion: 'us'
+  marketRegion: 'us',
+  dl: 'en',
+  ct: 'US',
 };
 
 const SEARCH_REGEX = /DDG\.pageLayout\.load\('d',(\[.+\])\);DDG\.duckbar\.load\('images'/;
@@ -131,9 +135,9 @@ export async function search(query: string, options?: SearchOptions, needleOptio
     ...(options.safeSearch === SafeSearchType.STRICT ? { p: '1' } : {}),
     kl: options.region || 'wt-wt',
     s: String(options.offset),
-    dl: 'en',
-    ct: 'US',
-    ss_mkt: options.marketRegion!,
+    dl: options.dl || 'en',
+    ct: options.ct || 'US',
+    // ss_mkt: options.marketRegion!,
     df: options.time! as string,
     vqd,
     ...(options.safeSearch !== SafeSearchType.STRICT ? { ex: String(options.safeSearch) } : {}),
